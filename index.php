@@ -7,8 +7,9 @@ session_start();
 // Copyright (c) 2022/2025 - Serge Tsakiropoulos - Office de Tourisme de Martigues
 
 /*
-A FAIRE : Si il n'existe pas de période de fin dans les horaires, alors il faut soit dupliquer l'horaire, soir faire
-un ajout de 2 heures à l'horaire d'ouverture
+A FAIRE : Si il n'existe pas de période de fin dans les horaires, alors il faut soit dupliquer l'horaire, soit faire un ajout de 2 heures à l'horaire d'ouverture
+        : Bug détecté dans le décallage horaire sur OpenAgenda. OpenAgenda change le décallage d'une ou deux heures en fonction des heures d'été ou d'hivers (Je trouve ça idiot ) 
+          Quand une manif est à 14h dans la date, il doit être 14h sur OpenAgenda, pourquoi il change l'heure d'une heure ou deux !! Grrr !!
 */
 
 	/* if (!file_exists("config/config.php")) {	
