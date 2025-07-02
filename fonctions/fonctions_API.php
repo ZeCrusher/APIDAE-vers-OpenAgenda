@@ -59,29 +59,20 @@ function API_Resource($url_source)
 
 function create_localisation_event($accessToken,$Openagenda_data,$agendaUid)
 { 
-
 	$URL = 'https://api.openagenda.com/v2/agendas/'.$agendaUid.'/locations';
-
 	$session = curl_init();
-
 	curl_setopt($session, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_setopt($session, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_setopt($session, CURLOPT_URL, $URL );
 	curl_setopt($session, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($session, CURLOPT_POST, true);
-
 	curl_setopt($session, CURLOPT_POSTFIELDS, array(
 		'access_token' => $accessToken,
 		'nonce' => rand(),
 		'data' => json_encode($Openagenda_data)
 	));
-
 	$received_content = curl_exec($session);
-	
-	// echo "received_content >".$received_content."";
-
 	return $received_content;
-	
 }
 /****************************************************************************************************************************************************** 
 *  Création d'un événement 
@@ -120,7 +111,10 @@ function create_event( $accessToken, $Openagenda_data, $agendaUid)
 	if ($received_content->error!="") { /* En cas d'erreur, arrêt du script avec die !  */
 		die("Il existe une erreur  ['".$result_loc->error."']");
 	}
-
+	write_to_console("- Début de la fonction create_event de EVENT --------------------------------------------------------------------------------------------------------------");
+	write_to_console("Create_event >".$received_content);
+	write_to_console("- return de EVENT--------------------------------------------------------------------------------------------------------------");
+	
 	return $received_content;
 	
 }
@@ -140,13 +134,15 @@ function update_event($accessToken,$Openagenda_data,$agendaUid,$eventUid)
   
   	$URL = 'https://api.openagenda.com/v2/agendas/'.$agendaUid.'/events/'.$eventUid;
 	
-
+	write_to_console("-------Fonction_API-----------------");
 	write_to_console("URL_update_event >".$URL);
-	write_to_console("id à MAJ >".$eventUid);
+	write_to_console("agendaUid à MAJ >".$agendaUid);
+	write_to_console("eventUid à MAJ >".$eventUid);
+	write_to_console("------------------------------------");
 	
 	$retour_curl = curl_init();
 
-	echo "Retour_curl >".$retour_curl."<br>";
+	// echo "Retour_curl >".$retour_curl."<br>";
 
 	curl_setopt($retour_curl, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_setopt($retour_curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -166,8 +162,9 @@ function update_event($accessToken,$Openagenda_data,$agendaUid,$eventUid)
 	if ($received_content->error!="") { /* En cas d'erreur, arrêt du script avec die !  */
 		die("Il existe une erreur  ['".$result_loc->error."']");
 	}
-	 return $received_content;
+	// ecrire_data($received_content);
 	
+	return $received_content;
 }
 /****************************************************************************************************************************************************** 
 *  Mise à jour d'un événement 
@@ -207,6 +204,69 @@ function access_token_get($secret)
   
   return $access_token;
 }
+
+
+
+/* En TEST  ******************************************************************************************************************* */
+/* 																*/
+/* 															   	*/
+/* 															      	*/
+
+
+function updateOpenagendaEvent($accessToken, $agendaUid, $eventUid, $Openagenda_event_data, $Openagenda_event_adresse) {
+    
+    $url = "https://api.openagenda.com/v2/agendas/$agendaUid/events/$eventUid";
+	
+    // Construction du tableau final à envoyer
+    $dataToSend = array_merge(
+        $Openagenda_event_data,
+        array('location' => $Openagenda_event_adresse)
+    );
+
+    // Initialisation de la requête cURL
+    $ch = curl_init($url);
+	
+	ecrire_data($url);
+	ecrire_data($accessToken);
+	ecrire_data($agendaUid);
+	ecrire_data($eventUid); 
+	ecrire_data($Openagenda_event_data);
+	ecrire_data($Openagenda_event_adresse);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); // Méthode PUT pour mise à jour
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Authorization: Bearer ' . $accessToken,
+        'Content-Type: application/json'
+    ));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dataToSend));
+
+    // Exécution de la requête
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+
+
+    // Vérification du résultat
+    if ($httpCode >= 200 && $httpCode < 300) {
+        return array(
+            'success' => true,
+            'response' => json_decode($response, true)
+        );
+    } else {
+        return array(
+            'success' => false,
+            'httpCode' => $httpCode,
+            'error' => $curlError,
+            'response' => json_decode($response, true)
+        );
+    }
+}
+
+
+
 /****************************************************************************************************************************************************** 
 *  Afficher des données dans la console du navigateur
 * version 1.1 
