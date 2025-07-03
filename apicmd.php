@@ -1,8 +1,22 @@
 <?php
 
-//On demarre les sessions
+//On demarre les sessions pour ODYSSEE
 session_start();
 
+//  PHP Version 7.2.24-0ubuntu0.18.04.9
+// Gardez-moi une place sur le vaisseau-mère 👽
+/*
+				MMM"""AMV `7MM"""YMM    .g8"""bgd `7MM"""Mq.`7MMF'   `7MF'.M"""bgd `7MMF'  `7MMF'`7MM"""YMM  `7MM"""Mq.  
+				M'   AMV    MM    `7  .dP'     `M   MM   `MM. MM       M ,MI    "Y   MM      MM    MM    `7    MM   `MM. 
+				'   AMV     MM   d    dM'       `   MM   ,M9  MM       M `MMb.       MM      MM    MM   d      MM   ,M9  
+				   AMV      MMmmMM    MM            MMmmdM9   MM       M   `YMMNq.   MMmmmmmmMM    MMmmMM      MMmmdM9   
+				  AMV   ,   MM   Y  , MM.           MM  YM.   MM       M .     `MM   MM      MM    MM   Y  ,   MM  YM.   
+				 AMV   ,M   MM     ,M `Mb.     ,'   MM   `Mb. YM.     ,M Mb     dM   MM      MM    MM     ,M   MM   `Mb. 
+				AMVmmmmMM .JMMmmmmMMM   `"bmmmd'  .JMML. .JMM. `bmmmmd"' P"Ybmmd"  .JMML.  .JMML..JMMmmmmMMM .JMML. .JMM.
+					******************************************* 
+						Developed by:  ZeCrusher <zecrusher@gmail.com>  																							  _                        
+
+*/
 	if (!file_exists("fonctions/fonctions_API.php")) 	{	
 		header ('Location: 404.php&fonctions');
 		exit();	
@@ -30,9 +44,65 @@ session_start();
 	<title>APIDAE > APICMD > OPENAGENDA</title>
 </head>
 
+/*
+	Extranet / <- Cette arborescence fait partie d'un plus vaste projet qui est notre Extranet */ 
+
+      ├── ajax 								-> Liste des fichiers .PHP pour calendar, notes, like, theme, rechercher
+      ├── css								-> css de l'extranet
+	  │    ├── style.css  					-> mise à jour le 02/08/2020 - star2 star1 - étoile dans le fond du site 
+	  │    ├── stylewhite.css  				-> mise à jour le 22/10/2018 - béta - version white avec modif de beaucoup de css - voir $_SESSION['theme']	  
+      ├── fichiers							-> Dossier du module "explorateur de fichier" dans l'extranet
+      ├── fonts								-> Toutes les polices 
+      ├── img/								
+      │   ├── body							-> fond du site - image des thèmes
+      │   ├── carousel/
+      │   ├── color-picker
+      │   ├── editor
+      │   ├── filemanager
+      │   ├── gallery	  
+      │   ├── icon
+      │   └── toolkit.scss
+      ├── js/
+      │   ├── bootstrap/				
+      │   └── custom/
+      ├── pages/
+      │   └── blog 
+      │    
+      │   ├── navbar.php <- menu horizontal				
+      │   └── sidebar.php <- menu vertical 
+      ├── log/	  
+      ├── media/	  
+      │   ├── bootstrap-entypo.eot
+      │   ├── bootstrap-entypo.svg
+      │   ├── bootstrap-entypo.ttf
+      │   ├── bootstrap-entypo.woff
+      │   └── bootstrap-entypo.woff2
+      └── php
+
+*/	
+
+
 <?php
 	
-	$_SESSION['last_version'] ="V2022-11-17-V1-TSK"; 
+	$_SESSION['last_version'] ="V2025-07-02-V4-TSK"; 
+
+
+/* Nous avons ici l'identification d'un membre de l'extranet. Et cette page n'est autorisée qu'au membre du groupe */
+/*	
+	if (!isset($_SESSION['login']) || ($_SESSION['login']=="")) {
+		header ('Location: authentication/sign-up/index.php?mode='.$_GET['mode']);
+		exit();
+	}
+*/
+
+
+
+/* Chargement des fichiers API - Si vous avez un fichier config.php qui contiendrait les clefs */ 
+/*		$file = $_SERVER['DOCUMENT_ROOT']."/odyssee/apps/api/config.php";
+		if (file_exists($file)) { include $file; } else {	echo "Le fichier config est introuvable.";	}		
+*/
+
+
 
 	$keys = array( /* Les clés API permettent de lire et écrire des données sur OpenAgenda via l'API. */
  	  "public"=>$_GET['public'], /* Pour OpenAgenda en lecture */
@@ -40,7 +110,7 @@ session_start();
 	);
 	
 	
-	$agendaUid=65630513; /* <uid:65630513> */
+	$agendaUid=14275573; /* <uid:65630513> */
 	$territoireIds=array("5693912"); /* Conseil de territoire : Pays de Martigues */ 
  
 	$selectionIds=array("130723","133484");
@@ -117,7 +187,7 @@ Note dans la lecture des commentaires :
 
 */
 
-	write_to_console(" Start API - 2022 - TSK OT - Martigues");
+	write_to_console(" Start API - 2025/2026 - TSK OT - Martigues");
 	write_to_console("La requête : ");
 	write_to_console(json_encode($requete));
 
